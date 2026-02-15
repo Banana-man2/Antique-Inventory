@@ -69,9 +69,19 @@ func Condition(v int) predicate.Gun {
 	return predicate.Gun(sql.FieldEQ(FieldCondition, v))
 }
 
+// SerialNumber applies equality check predicate on the "serial_number" field. It's identical to SerialNumberEQ.
+func SerialNumber(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldEQ(FieldSerialNumber, v))
+}
+
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.Gun {
 	return predicate.Gun(sql.FieldEQ(FieldDescription, v))
+}
+
+// Image applies equality check predicate on the "image" field. It's identical to ImageEQ.
+func Image(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldEQ(FieldImage, v))
 }
 
 // MiscAttachments applies equality check predicate on the "misc_attachments" field. It's identical to MiscAttachmentsEQ.
@@ -254,6 +264,81 @@ func ConditionNotNil() predicate.Gun {
 	return predicate.Gun(sql.FieldNotNull(FieldCondition))
 }
 
+// SerialNumberEQ applies the EQ predicate on the "serial_number" field.
+func SerialNumberEQ(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldEQ(FieldSerialNumber, v))
+}
+
+// SerialNumberNEQ applies the NEQ predicate on the "serial_number" field.
+func SerialNumberNEQ(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldNEQ(FieldSerialNumber, v))
+}
+
+// SerialNumberIn applies the In predicate on the "serial_number" field.
+func SerialNumberIn(vs ...string) predicate.Gun {
+	return predicate.Gun(sql.FieldIn(FieldSerialNumber, vs...))
+}
+
+// SerialNumberNotIn applies the NotIn predicate on the "serial_number" field.
+func SerialNumberNotIn(vs ...string) predicate.Gun {
+	return predicate.Gun(sql.FieldNotIn(FieldSerialNumber, vs...))
+}
+
+// SerialNumberGT applies the GT predicate on the "serial_number" field.
+func SerialNumberGT(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldGT(FieldSerialNumber, v))
+}
+
+// SerialNumberGTE applies the GTE predicate on the "serial_number" field.
+func SerialNumberGTE(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldGTE(FieldSerialNumber, v))
+}
+
+// SerialNumberLT applies the LT predicate on the "serial_number" field.
+func SerialNumberLT(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldLT(FieldSerialNumber, v))
+}
+
+// SerialNumberLTE applies the LTE predicate on the "serial_number" field.
+func SerialNumberLTE(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldLTE(FieldSerialNumber, v))
+}
+
+// SerialNumberContains applies the Contains predicate on the "serial_number" field.
+func SerialNumberContains(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldContains(FieldSerialNumber, v))
+}
+
+// SerialNumberHasPrefix applies the HasPrefix predicate on the "serial_number" field.
+func SerialNumberHasPrefix(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldHasPrefix(FieldSerialNumber, v))
+}
+
+// SerialNumberHasSuffix applies the HasSuffix predicate on the "serial_number" field.
+func SerialNumberHasSuffix(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldHasSuffix(FieldSerialNumber, v))
+}
+
+// SerialNumberIsNil applies the IsNil predicate on the "serial_number" field.
+func SerialNumberIsNil() predicate.Gun {
+	return predicate.Gun(sql.FieldIsNull(FieldSerialNumber))
+}
+
+// SerialNumberNotNil applies the NotNil predicate on the "serial_number" field.
+func SerialNumberNotNil() predicate.Gun {
+	return predicate.Gun(sql.FieldNotNull(FieldSerialNumber))
+}
+
+// SerialNumberEqualFold applies the EqualFold predicate on the "serial_number" field.
+func SerialNumberEqualFold(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldEqualFold(FieldSerialNumber, v))
+}
+
+// SerialNumberContainsFold applies the ContainsFold predicate on the "serial_number" field.
+func SerialNumberContainsFold(v string) predicate.Gun {
+	return predicate.Gun(sql.FieldContainsFold(FieldSerialNumber, v))
+}
+
 // DescriptionEQ applies the EQ predicate on the "description" field.
 func DescriptionEQ(v string) predicate.Gun {
 	return predicate.Gun(sql.FieldEQ(FieldDescription, v))
@@ -327,6 +412,56 @@ func DescriptionEqualFold(v string) predicate.Gun {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.Gun {
 	return predicate.Gun(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// ImageEQ applies the EQ predicate on the "image" field.
+func ImageEQ(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldEQ(FieldImage, v))
+}
+
+// ImageNEQ applies the NEQ predicate on the "image" field.
+func ImageNEQ(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldNEQ(FieldImage, v))
+}
+
+// ImageIn applies the In predicate on the "image" field.
+func ImageIn(vs ...[]byte) predicate.Gun {
+	return predicate.Gun(sql.FieldIn(FieldImage, vs...))
+}
+
+// ImageNotIn applies the NotIn predicate on the "image" field.
+func ImageNotIn(vs ...[]byte) predicate.Gun {
+	return predicate.Gun(sql.FieldNotIn(FieldImage, vs...))
+}
+
+// ImageGT applies the GT predicate on the "image" field.
+func ImageGT(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldGT(FieldImage, v))
+}
+
+// ImageGTE applies the GTE predicate on the "image" field.
+func ImageGTE(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldGTE(FieldImage, v))
+}
+
+// ImageLT applies the LT predicate on the "image" field.
+func ImageLT(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldLT(FieldImage, v))
+}
+
+// ImageLTE applies the LTE predicate on the "image" field.
+func ImageLTE(v []byte) predicate.Gun {
+	return predicate.Gun(sql.FieldLTE(FieldImage, v))
+}
+
+// ImageIsNil applies the IsNil predicate on the "image" field.
+func ImageIsNil() predicate.Gun {
+	return predicate.Gun(sql.FieldIsNull(FieldImage))
+}
+
+// ImageNotNil applies the NotNil predicate on the "image" field.
+func ImageNotNil() predicate.Gun {
+	return predicate.Gun(sql.FieldNotNull(FieldImage))
 }
 
 // MiscAttachmentsEQ applies the EQ predicate on the "misc_attachments" field.

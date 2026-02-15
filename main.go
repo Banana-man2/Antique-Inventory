@@ -39,6 +39,7 @@ func main() {
 	r.GET("/guns/new", h.ShowCreateForm)
 	r.GET("/guns/:id", h.GetGun)
 	r.GET("/guns/:id/edit", h.ShowEditForm)
+	r.GET("/guns/:id/image", h.ServeImage)
 	r.POST("/guns", h.CreateGunForm)
 	r.POST("/guns/:id", h.UpdateGunForm)
 

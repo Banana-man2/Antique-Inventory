@@ -23,9 +23,11 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Serial Number</th>
                 <th>Year</th>
                 <th>Condition</th>
                 <th>Description</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,9 +36,11 @@
             <tr>
                 <td>{{.ID}}</td>
                 <td>{{.GunName}}</td>
+                <td>{{.SerialNumber}}</td>
                 <td>{{if .Year}}{{.Year}}{{else}}-{{end}}</td>
                 <td>{{if .Condition}}{{.Condition}}{{else}}-{{end}}</td>
                 <td>{{.Description}}</td>
+                <td>{{if .Image}}<img src="/guns/{{.ID}}/image" style="max-height: 60px;">{{end}}</td>
                 <td>
                     <a href="/guns/{{.ID}}">View</a> |
                     <a href="/guns/{{.ID}}/edit">Edit</a>
@@ -44,7 +48,7 @@
             </tr>
             {{else}}
             <tr>
-                <td colspan="6">No guns in inventory.</td>
+                <td colspan="8">No guns in inventory.</td>
             </tr>
             {{end}}
         </tbody>

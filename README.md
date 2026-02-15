@@ -34,9 +34,11 @@ Table: `guns`
 |------------------|---------|--------------------------|
 | gun_id           | INTEGER | Primary key              |
 | gun_name         | TEXT    | Required, max 255 chars  |
+| serial_number    | TEXT    | Optional, max 255 chars  |
 | year             | INTEGER | Optional, nullable       |
 | condition        | INTEGER | Optional, nullable       |
 | description      | TEXT    | Optional, max 255 chars  |
+| image            | BLOB    | Optional, nullable       |
 | misc_attachments | TEXT    | Optional, max 255 chars  |
 | createdAt        | TIME    | Auto-set on create       |
 | updatedAt        | TIME    | Auto-set on create/update|
@@ -58,10 +60,11 @@ Server starts on http://localhost:8080.
 
 | Method | Path             | Description       |
 |--------|------------------|-------------------|
-| GET    | /guns            | List all guns     |
+| GET    | /guns            | List all guns (with serial numbers and image thumbnails) |
 | GET    | /guns/new        | New gun form      |
 | GET    | /guns/:id        | Gun detail page   |
 | GET    | /guns/:id/edit   | Edit gun form     |
+| GET    | /guns/:id/image  | Serve gun image   |
 | POST   | /guns            | Create gun        |
 | POST   | /guns/:id        | Update gun        |
 
@@ -84,7 +87,7 @@ curl http://localhost:8080/api/guns
 # Create a gun
 curl -X POST http://localhost:8080/api/guns \
   -H "Content-Type: application/json" \
-  -d '{"gun_name": "Colt 1851 Navy", "year": 1851, "condition": 7, "description": "Percussion revolver"}'
+  -d '{"gun_name": "Colt 1851 Navy", "year": 1851, "condition": 7, "description": "Percussion revolver", "serial_number": "12345"}'
 
 # Update a gun
 curl -X PUT http://localhost:8080/api/guns/1 \

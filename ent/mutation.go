@@ -38,7 +38,9 @@ type GunMutation struct {
 	addyear          *int
 	condition        *int
 	addcondition     *int
+	serial_number    *string
 	description      *string
+	image            *[]byte
 	misc_attachments *string
 	created_at       *time.Time
 	updated_at       *time.Time
@@ -328,6 +330,55 @@ func (m *GunMutation) ResetCondition() {
 	delete(m.clearedFields, gun.FieldCondition)
 }
 
+// SetSerialNumber sets the "serial_number" field.
+func (m *GunMutation) SetSerialNumber(s string) {
+	m.serial_number = &s
+}
+
+// SerialNumber returns the value of the "serial_number" field in the mutation.
+func (m *GunMutation) SerialNumber() (r string, exists bool) {
+	v := m.serial_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSerialNumber returns the old "serial_number" field's value of the Gun entity.
+// If the Gun object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GunMutation) OldSerialNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSerialNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSerialNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSerialNumber: %w", err)
+	}
+	return oldValue.SerialNumber, nil
+}
+
+// ClearSerialNumber clears the value of the "serial_number" field.
+func (m *GunMutation) ClearSerialNumber() {
+	m.serial_number = nil
+	m.clearedFields[gun.FieldSerialNumber] = struct{}{}
+}
+
+// SerialNumberCleared returns if the "serial_number" field was cleared in this mutation.
+func (m *GunMutation) SerialNumberCleared() bool {
+	_, ok := m.clearedFields[gun.FieldSerialNumber]
+	return ok
+}
+
+// ResetSerialNumber resets all changes to the "serial_number" field.
+func (m *GunMutation) ResetSerialNumber() {
+	m.serial_number = nil
+	delete(m.clearedFields, gun.FieldSerialNumber)
+}
+
 // SetDescription sets the "description" field.
 func (m *GunMutation) SetDescription(s string) {
 	m.description = &s
@@ -375,6 +426,55 @@ func (m *GunMutation) DescriptionCleared() bool {
 func (m *GunMutation) ResetDescription() {
 	m.description = nil
 	delete(m.clearedFields, gun.FieldDescription)
+}
+
+// SetImage sets the "image" field.
+func (m *GunMutation) SetImage(b []byte) {
+	m.image = &b
+}
+
+// Image returns the value of the "image" field in the mutation.
+func (m *GunMutation) Image() (r []byte, exists bool) {
+	v := m.image
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImage returns the old "image" field's value of the Gun entity.
+// If the Gun object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GunMutation) OldImage(ctx context.Context) (v *[]byte, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImage: %w", err)
+	}
+	return oldValue.Image, nil
+}
+
+// ClearImage clears the value of the "image" field.
+func (m *GunMutation) ClearImage() {
+	m.image = nil
+	m.clearedFields[gun.FieldImage] = struct{}{}
+}
+
+// ImageCleared returns if the "image" field was cleared in this mutation.
+func (m *GunMutation) ImageCleared() bool {
+	_, ok := m.clearedFields[gun.FieldImage]
+	return ok
+}
+
+// ResetImage resets all changes to the "image" field.
+func (m *GunMutation) ResetImage() {
+	m.image = nil
+	delete(m.clearedFields, gun.FieldImage)
 }
 
 // SetMiscAttachments sets the "misc_attachments" field.
@@ -532,7 +632,7 @@ func (m *GunMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GunMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 9)
 	if m.gun_name != nil {
 		fields = append(fields, gun.FieldGunName)
 	}
@@ -542,8 +642,14 @@ func (m *GunMutation) Fields() []string {
 	if m.condition != nil {
 		fields = append(fields, gun.FieldCondition)
 	}
+	if m.serial_number != nil {
+		fields = append(fields, gun.FieldSerialNumber)
+	}
 	if m.description != nil {
 		fields = append(fields, gun.FieldDescription)
+	}
+	if m.image != nil {
+		fields = append(fields, gun.FieldImage)
 	}
 	if m.misc_attachments != nil {
 		fields = append(fields, gun.FieldMiscAttachments)
@@ -568,8 +674,12 @@ func (m *GunMutation) Field(name string) (ent.Value, bool) {
 		return m.Year()
 	case gun.FieldCondition:
 		return m.Condition()
+	case gun.FieldSerialNumber:
+		return m.SerialNumber()
 	case gun.FieldDescription:
 		return m.Description()
+	case gun.FieldImage:
+		return m.Image()
 	case gun.FieldMiscAttachments:
 		return m.MiscAttachments()
 	case gun.FieldCreatedAt:
@@ -591,8 +701,12 @@ func (m *GunMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldYear(ctx)
 	case gun.FieldCondition:
 		return m.OldCondition(ctx)
+	case gun.FieldSerialNumber:
+		return m.OldSerialNumber(ctx)
 	case gun.FieldDescription:
 		return m.OldDescription(ctx)
+	case gun.FieldImage:
+		return m.OldImage(ctx)
 	case gun.FieldMiscAttachments:
 		return m.OldMiscAttachments(ctx)
 	case gun.FieldCreatedAt:
@@ -629,12 +743,26 @@ func (m *GunMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCondition(v)
 		return nil
+	case gun.FieldSerialNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSerialNumber(v)
+		return nil
 	case gun.FieldDescription:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDescription(v)
+		return nil
+	case gun.FieldImage:
+		v, ok := value.([]byte)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImage(v)
 		return nil
 	case gun.FieldMiscAttachments:
 		v, ok := value.(string)
@@ -720,8 +848,14 @@ func (m *GunMutation) ClearedFields() []string {
 	if m.FieldCleared(gun.FieldCondition) {
 		fields = append(fields, gun.FieldCondition)
 	}
+	if m.FieldCleared(gun.FieldSerialNumber) {
+		fields = append(fields, gun.FieldSerialNumber)
+	}
 	if m.FieldCleared(gun.FieldDescription) {
 		fields = append(fields, gun.FieldDescription)
+	}
+	if m.FieldCleared(gun.FieldImage) {
+		fields = append(fields, gun.FieldImage)
 	}
 	if m.FieldCleared(gun.FieldMiscAttachments) {
 		fields = append(fields, gun.FieldMiscAttachments)
@@ -746,8 +880,14 @@ func (m *GunMutation) ClearField(name string) error {
 	case gun.FieldCondition:
 		m.ClearCondition()
 		return nil
+	case gun.FieldSerialNumber:
+		m.ClearSerialNumber()
+		return nil
 	case gun.FieldDescription:
 		m.ClearDescription()
+		return nil
+	case gun.FieldImage:
+		m.ClearImage()
 		return nil
 	case gun.FieldMiscAttachments:
 		m.ClearMiscAttachments()
@@ -769,8 +909,14 @@ func (m *GunMutation) ResetField(name string) error {
 	case gun.FieldCondition:
 		m.ResetCondition()
 		return nil
+	case gun.FieldSerialNumber:
+		m.ResetSerialNumber()
+		return nil
 	case gun.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case gun.FieldImage:
+		m.ResetImage()
 		return nil
 	case gun.FieldMiscAttachments:
 		m.ResetMiscAttachments()
