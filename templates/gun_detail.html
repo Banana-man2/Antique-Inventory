@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gun Detail</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .detail { margin-bottom: 12px; }
+        .label { font-weight: bold; display: inline-block; width: 160px; }
+        a { color: #337ab7; text-decoration: none; margin-right: 12px; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>{{.gun.GunName}}</h1>
+    <div class="detail"><span class="label">ID:</span> {{.gun.ID}}</div>
+    <div class="detail"><span class="label">Year:</span> {{if .gun.Year}}{{.gun.Year}}{{else}}-{{end}}</div>
+    <div class="detail"><span class="label">Condition:</span> {{if .gun.Condition}}{{.gun.Condition}}{{else}}-{{end}}</div>
+    <div class="detail"><span class="label">Description:</span> {{.gun.Description}}</div>
+    <div class="detail"><span class="label">Misc Attachments:</span> {{.gun.MiscAttachments}}</div>
+    <div class="detail"><span class="label">Created At:</span> {{.gun.CreatedAt}}</div>
+    <div class="detail"><span class="label">Updated At:</span> {{.gun.UpdatedAt}}</div>
+    <br>
+    <a href="/guns">Back to List</a>
+    <a href="/guns/{{.gun.ID}}/edit">Edit</a>
+</body>
+</html>

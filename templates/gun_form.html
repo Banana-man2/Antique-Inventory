@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{if .gun}}Edit Gun{{else}}New Gun{{end}}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        label { display: block; margin-top: 12px; font-weight: bold; }
+        input, textarea { width: 300px; padding: 6px; margin-top: 4px; }
+        .btn { display: inline-block; padding: 8px 16px; background-color: #337ab7; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 16px; }
+        .btn:hover { background-color: #286090; }
+        a { color: #337ab7; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>{{if .gun}}Edit Gun{{else}}New Gun{{end}}</h1>
+    <form method="POST" action="{{if .gun}}/guns/{{.gun.ID}}{{else}}/guns{{end}}">
+        <label>Name:
+            <input type="text" name="gun_name" value="{{if .gun}}{{.gun.GunName}}{{end}}" required>
+        </label>
+        <label>Year:
+            <input type="number" name="year" value="{{if .gun}}{{if .gun.Year}}{{.gun.Year}}{{end}}{{end}}">
+        </label>
+        <label>Condition:
+            <input type="number" name="condition" value="{{if .gun}}{{if .gun.Condition}}{{.gun.Condition}}{{end}}{{end}}">
+        </label>
+        <label>Description:
+            <input type="text" name="description" value="{{if .gun}}{{.gun.Description}}{{end}}">
+        </label>
+        <label>Misc Attachments:
+            <input type="text" name="misc_attachments" value="{{if .gun}}{{.gun.MiscAttachments}}{{end}}">
+        </label>
+        <button type="submit" class="btn">{{if .gun}}Update{{else}}Create{{end}}</button>
+    </form>
+    <br>
+    <a href="/guns">Back to List</a>
+</body>
+</html>
