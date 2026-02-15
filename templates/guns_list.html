@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Antique-Inventory</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4a4a4a; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        a { color: #337ab7; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .btn { display: inline-block; padding: 8px 16px; background-color: #337ab7; color: white; border-radius: 4px; margin-bottom: 16px; }
+        .btn:hover { background-color: #286090; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Antique-Inventory</h1>
+    <a class="btn" href="/guns/new">Add New Gun</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Year</th>
+                <th>Condition</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .guns}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.GunName}}</td>
+                <td>{{if .Year}}{{.Year}}{{else}}-{{end}}</td>
+                <td>{{if .Condition}}{{.Condition}}{{else}}-{{end}}</td>
+                <td>{{.Description}}</td>
+                <td>
+                    <a href="/guns/{{.ID}}">View</a> |
+                    <a href="/guns/{{.ID}}/edit">Edit</a>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="6">No guns in inventory.</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</body>
+</html>
