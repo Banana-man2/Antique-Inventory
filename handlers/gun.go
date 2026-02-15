@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"io"
 	"net/http"
 	"strconv"
 
@@ -57,6 +58,21 @@ func (h *GunHandler) ShowEditForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "gun_form.html", gin.H{"gun": g})
 }
 
+func (h *GunHandler) ServeImage(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusBadRequest, "Invalid ID")
+		return
+	}
+	g, err := h.Client.Gun.Get(c.Request.Context(), id)
+	if err != nil || g.Image == nil {
+		c.String(http.StatusNotFound, "Image not found")
+		return
+	}
+	contentType := http.DetectContentType(*g.Image)
+	c.Data(http.StatusOK, contentType, *g.Image)
+}
+
 func (h *GunHandler) CreateGunForm(c *gin.Context) {
 	create := h.Client.Gun.Create().
 		SetGunName(c.PostForm("gun_name"))
@@ -71,11 +87,24 @@ func (h *GunHandler) CreateGunForm(c *gin.Context) {
 			create.SetCondition(cond)
 		}
 	}
+	if v := c.PostForm("serial_number"); v != "" {
+		create.SetSerialNumber(v)
+	}
 	if v := c.PostForm("description"); v != "" {
 		create.SetDescription(v)
 	}
 	if v := c.PostForm("misc_attachments"); v != "" {
 		create.SetMiscAttachments(v)
+	}
+	if file, err := c.FormFile("image"); err == nil {
+		f, err := file.Open()
+		if err == nil {
+			defer f.Close()
+			data, err := io.ReadAll(f)
+			if err == nil {
+				create.SetImage(data)
+			}
+		}
 	}
 
 	_, err := create.Save(c.Request.Context())
@@ -110,6 +139,11 @@ func (h *GunHandler) UpdateGunForm(c *gin.Context) {
 	} else {
 		update.ClearCondition()
 	}
+	if v := c.PostForm("serial_number"); v != "" {
+		update.SetSerialNumber(v)
+	} else {
+		update.ClearSerialNumber()
+	}
 	if v := c.PostForm("description"); v != "" {
 		update.SetDescription(v)
 	} else {
@@ -119,6 +153,16 @@ func (h *GunHandler) UpdateGunForm(c *gin.Context) {
 		update.SetMiscAttachments(v)
 	} else {
 		update.ClearMiscAttachments()
+	}
+	if file, err := c.FormFile("image"); err == nil {
+		f, err := file.Open()
+		if err == nil {
+			defer f.Close()
+			data, err := io.ReadAll(f)
+			if err == nil {
+				update.SetImage(data)
+			}
+		}
 	}
 
 	_, err = update.Save(c.Request.Context())
@@ -159,6 +203,7 @@ func (h *GunHandler) CreateGun(c *gin.Context) {
 		GunName         string `json:"gun_name"`
 		Year            *int   `json:"year"`
 		Condition       *int   `json:"condition"`
+		SerialNumber    string `json:"serial_number"`
 		Description     string `json:"description"`
 		MiscAttachments string `json:"misc_attachments"`
 	}
@@ -173,6 +218,9 @@ func (h *GunHandler) CreateGun(c *gin.Context) {
 	}
 	if input.Condition != nil {
 		create.SetCondition(*input.Condition)
+	}
+	if input.SerialNumber != "" {
+		create.SetSerialNumber(input.SerialNumber)
 	}
 	if input.Description != "" {
 		create.SetDescription(input.Description)
@@ -200,6 +248,7 @@ func (h *GunHandler) UpdateGun(c *gin.Context) {
 		GunName         string `json:"gun_name"`
 		Year            *int   `json:"year"`
 		Condition       *int   `json:"condition"`
+		SerialNumber    string `json:"serial_number"`
 		Description     string `json:"description"`
 		MiscAttachments string `json:"misc_attachments"`
 	}
@@ -218,6 +267,11 @@ func (h *GunHandler) UpdateGun(c *gin.Context) {
 		update.SetCondition(*input.Condition)
 	} else {
 		update.ClearCondition()
+	}
+	if input.SerialNumber != "" {
+		update.SetSerialNumber(input.SerialNumber)
+	} else {
+		update.ClearSerialNumber()
 	}
 	if input.Description != "" {
 		update.SetDescription(input.Description)

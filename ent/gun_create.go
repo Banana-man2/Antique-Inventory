@@ -54,6 +54,20 @@ func (_c *GunCreate) SetNillableCondition(v *int) *GunCreate {
 	return _c
 }
 
+// SetSerialNumber sets the "serial_number" field.
+func (_c *GunCreate) SetSerialNumber(v string) *GunCreate {
+	_c.mutation.SetSerialNumber(v)
+	return _c
+}
+
+// SetNillableSerialNumber sets the "serial_number" field if the given value is not nil.
+func (_c *GunCreate) SetNillableSerialNumber(v *string) *GunCreate {
+	if v != nil {
+		_c.SetSerialNumber(*v)
+	}
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *GunCreate) SetDescription(v string) *GunCreate {
 	_c.mutation.SetDescription(v)
@@ -65,6 +79,12 @@ func (_c *GunCreate) SetNillableDescription(v *string) *GunCreate {
 	if v != nil {
 		_c.SetDescription(*v)
 	}
+	return _c
+}
+
+// SetImage sets the "image" field.
+func (_c *GunCreate) SetImage(v []byte) *GunCreate {
+	_c.mutation.SetImage(v)
 	return _c
 }
 
@@ -171,6 +191,11 @@ func (_c *GunCreate) check() error {
 			return &ValidationError{Name: "gun_name", err: fmt.Errorf(`ent: validator failed for field "Gun.gun_name": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.SerialNumber(); ok {
+		if err := gun.SerialNumberValidator(v); err != nil {
+			return &ValidationError{Name: "serial_number", err: fmt.Errorf(`ent: validator failed for field "Gun.serial_number": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Description(); ok {
 		if err := gun.DescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Gun.description": %w`, err)}
@@ -231,9 +256,17 @@ func (_c *GunCreate) createSpec() (*Gun, *sqlgraph.CreateSpec) {
 		_spec.SetField(gun.FieldCondition, field.TypeInt, value)
 		_node.Condition = &value
 	}
+	if value, ok := _c.mutation.SerialNumber(); ok {
+		_spec.SetField(gun.FieldSerialNumber, field.TypeString, value)
+		_node.SerialNumber = value
+	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(gun.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := _c.mutation.Image(); ok {
+		_spec.SetField(gun.FieldImage, field.TypeBytes, value)
+		_node.Image = &value
 	}
 	if value, ok := _c.mutation.MiscAttachments(); ok {
 		_spec.SetField(gun.FieldMiscAttachments, field.TypeString, value)

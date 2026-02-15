@@ -28,7 +28,9 @@ func (Gun) Fields() []ent.Field {
 		field.String("gun_name").MaxLen(255),
 		field.Int("year").Optional().Nillable(),
 		field.Int("condition").Optional().Nillable(),
+		field.String("serial_number").Optional().MaxLen(255),
 		field.String("description").Optional().MaxLen(255),
+		field.Bytes("image").Optional().Nillable(),
 		field.String("misc_attachments").Optional().MaxLen(255),
 		field.Time("created_at").
 			Default(time.Now).

@@ -14,9 +14,12 @@
 </head>
 <body>
     <h1>{{if .gun}}Edit Gun{{else}}New Gun{{end}}</h1>
-    <form method="POST" action="{{if .gun}}/guns/{{.gun.ID}}{{else}}/guns{{end}}">
+    <form method="POST" action="{{if .gun}}/guns/{{.gun.ID}}{{else}}/guns{{end}}" enctype="multipart/form-data">
         <label>Name:
             <input type="text" name="gun_name" value="{{if .gun}}{{.gun.GunName}}{{end}}" required>
+        </label>
+        <label>Serial Number:
+            <input type="text" name="serial_number" value="{{if .gun}}{{.gun.SerialNumber}}{{end}}">
         </label>
         <label>Year:
             <input type="number" name="year" value="{{if .gun}}{{if .gun.Year}}{{.gun.Year}}{{end}}{{end}}">
@@ -27,6 +30,15 @@
         <label>Description:
             <input type="text" name="description" value="{{if .gun}}{{.gun.Description}}{{end}}">
         </label>
+        <label>Image:
+            <input type="file" name="image" accept="image/*">
+        </label>
+        {{if .gun}}{{if .gun.Image}}
+        <div style="margin-top: 8px;">
+            <span style="font-weight: bold;">Current image:</span><br>
+            <img src="/guns/{{.gun.ID}}/image" style="max-width: 200px; max-height: 200px; margin-top: 4px;">
+        </div>
+        {{end}}{{end}}
         <label>Misc Attachments:
             <input type="text" name="misc_attachments" value="{{if .gun}}{{.gun.MiscAttachments}}{{end}}">
         </label>

@@ -23,8 +23,12 @@ type Gun struct {
 	Year *int `json:"year,omitempty"`
 	// Condition holds the value of the "condition" field.
 	Condition *int `json:"condition,omitempty"`
+	// SerialNumber holds the value of the "serial_number" field.
+	SerialNumber string `json:"serial_number,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// Image holds the value of the "image" field.
+	Image *[]byte `json:"image,omitempty"`
 	// MiscAttachments holds the value of the "misc_attachments" field.
 	MiscAttachments string `json:"misc_attachments,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -39,9 +43,11 @@ func (*Gun) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case gun.FieldImage:
+			values[i] = new([]byte)
 		case gun.FieldID, gun.FieldYear, gun.FieldCondition:
 			values[i] = new(sql.NullInt64)
-		case gun.FieldGunName, gun.FieldDescription, gun.FieldMiscAttachments:
+		case gun.FieldGunName, gun.FieldSerialNumber, gun.FieldDescription, gun.FieldMiscAttachments:
 			values[i] = new(sql.NullString)
 		case gun.FieldCreatedAt, gun.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -86,11 +92,23 @@ func (_m *Gun) assignValues(columns []string, values []any) error {
 				_m.Condition = new(int)
 				*_m.Condition = int(value.Int64)
 			}
+		case gun.FieldSerialNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field serial_number", values[i])
+			} else if value.Valid {
+				_m.SerialNumber = value.String
+			}
 		case gun.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				_m.Description = value.String
+			}
+		case gun.FieldImage:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field image", values[i])
+			} else if value != nil {
+				_m.Image = value
 			}
 		case gun.FieldMiscAttachments:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -159,8 +177,16 @@ func (_m *Gun) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
+	builder.WriteString("serial_number=")
+	builder.WriteString(_m.SerialNumber)
+	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	if v := _m.Image; v != nil {
+		builder.WriteString("image=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("misc_attachments=")
 	builder.WriteString(_m.MiscAttachments)

@@ -19,8 +19,12 @@ const (
 	FieldYear = "year"
 	// FieldCondition holds the string denoting the condition field in the database.
 	FieldCondition = "condition"
+	// FieldSerialNumber holds the string denoting the serial_number field in the database.
+	FieldSerialNumber = "serial_number"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldImage holds the string denoting the image field in the database.
+	FieldImage = "image"
 	// FieldMiscAttachments holds the string denoting the misc_attachments field in the database.
 	FieldMiscAttachments = "misc_attachments"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -37,7 +41,9 @@ var Columns = []string{
 	FieldGunName,
 	FieldYear,
 	FieldCondition,
+	FieldSerialNumber,
 	FieldDescription,
+	FieldImage,
 	FieldMiscAttachments,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -56,6 +62,8 @@ func ValidColumn(column string) bool {
 var (
 	// GunNameValidator is a validator for the "gun_name" field. It is called by the builders before save.
 	GunNameValidator func(string) error
+	// SerialNumberValidator is a validator for the "serial_number" field. It is called by the builders before save.
+	SerialNumberValidator func(string) error
 	// DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
 	DescriptionValidator func(string) error
 	// MiscAttachmentsValidator is a validator for the "misc_attachments" field. It is called by the builders before save.
@@ -89,6 +97,11 @@ func ByYear(opts ...sql.OrderTermOption) OrderOption {
 // ByCondition orders the results by the condition field.
 func ByCondition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCondition, opts...).ToFunc()
+}
+
+// BySerialNumber orders the results by the serial_number field.
+func BySerialNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSerialNumber, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.

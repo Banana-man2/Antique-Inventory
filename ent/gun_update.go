@@ -96,6 +96,26 @@ func (_u *GunUpdate) ClearCondition() *GunUpdate {
 	return _u
 }
 
+// SetSerialNumber sets the "serial_number" field.
+func (_u *GunUpdate) SetSerialNumber(v string) *GunUpdate {
+	_u.mutation.SetSerialNumber(v)
+	return _u
+}
+
+// SetNillableSerialNumber sets the "serial_number" field if the given value is not nil.
+func (_u *GunUpdate) SetNillableSerialNumber(v *string) *GunUpdate {
+	if v != nil {
+		_u.SetSerialNumber(*v)
+	}
+	return _u
+}
+
+// ClearSerialNumber clears the value of the "serial_number" field.
+func (_u *GunUpdate) ClearSerialNumber() *GunUpdate {
+	_u.mutation.ClearSerialNumber()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *GunUpdate) SetDescription(v string) *GunUpdate {
 	_u.mutation.SetDescription(v)
@@ -113,6 +133,18 @@ func (_u *GunUpdate) SetNillableDescription(v *string) *GunUpdate {
 // ClearDescription clears the value of the "description" field.
 func (_u *GunUpdate) ClearDescription() *GunUpdate {
 	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetImage sets the "image" field.
+func (_u *GunUpdate) SetImage(v []byte) *GunUpdate {
+	_u.mutation.SetImage(v)
+	return _u
+}
+
+// ClearImage clears the value of the "image" field.
+func (_u *GunUpdate) ClearImage() *GunUpdate {
+	_u.mutation.ClearImage()
 	return _u
 }
 
@@ -190,6 +222,11 @@ func (_u *GunUpdate) check() error {
 			return &ValidationError{Name: "gun_name", err: fmt.Errorf(`ent: validator failed for field "Gun.gun_name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SerialNumber(); ok {
+		if err := gun.SerialNumberValidator(v); err != nil {
+			return &ValidationError{Name: "serial_number", err: fmt.Errorf(`ent: validator failed for field "Gun.serial_number": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Description(); ok {
 		if err := gun.DescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Gun.description": %w`, err)}
@@ -236,11 +273,23 @@ func (_u *GunUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ConditionCleared() {
 		_spec.ClearField(gun.FieldCondition, field.TypeInt)
 	}
+	if value, ok := _u.mutation.SerialNumber(); ok {
+		_spec.SetField(gun.FieldSerialNumber, field.TypeString, value)
+	}
+	if _u.mutation.SerialNumberCleared() {
+		_spec.ClearField(gun.FieldSerialNumber, field.TypeString)
+	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(gun.FieldDescription, field.TypeString, value)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(gun.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Image(); ok {
+		_spec.SetField(gun.FieldImage, field.TypeBytes, value)
+	}
+	if _u.mutation.ImageCleared() {
+		_spec.ClearField(gun.FieldImage, field.TypeBytes)
 	}
 	if value, ok := _u.mutation.MiscAttachments(); ok {
 		_spec.SetField(gun.FieldMiscAttachments, field.TypeString, value)
@@ -339,6 +388,26 @@ func (_u *GunUpdateOne) ClearCondition() *GunUpdateOne {
 	return _u
 }
 
+// SetSerialNumber sets the "serial_number" field.
+func (_u *GunUpdateOne) SetSerialNumber(v string) *GunUpdateOne {
+	_u.mutation.SetSerialNumber(v)
+	return _u
+}
+
+// SetNillableSerialNumber sets the "serial_number" field if the given value is not nil.
+func (_u *GunUpdateOne) SetNillableSerialNumber(v *string) *GunUpdateOne {
+	if v != nil {
+		_u.SetSerialNumber(*v)
+	}
+	return _u
+}
+
+// ClearSerialNumber clears the value of the "serial_number" field.
+func (_u *GunUpdateOne) ClearSerialNumber() *GunUpdateOne {
+	_u.mutation.ClearSerialNumber()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *GunUpdateOne) SetDescription(v string) *GunUpdateOne {
 	_u.mutation.SetDescription(v)
@@ -356,6 +425,18 @@ func (_u *GunUpdateOne) SetNillableDescription(v *string) *GunUpdateOne {
 // ClearDescription clears the value of the "description" field.
 func (_u *GunUpdateOne) ClearDescription() *GunUpdateOne {
 	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetImage sets the "image" field.
+func (_u *GunUpdateOne) SetImage(v []byte) *GunUpdateOne {
+	_u.mutation.SetImage(v)
+	return _u
+}
+
+// ClearImage clears the value of the "image" field.
+func (_u *GunUpdateOne) ClearImage() *GunUpdateOne {
+	_u.mutation.ClearImage()
 	return _u
 }
 
@@ -446,6 +527,11 @@ func (_u *GunUpdateOne) check() error {
 			return &ValidationError{Name: "gun_name", err: fmt.Errorf(`ent: validator failed for field "Gun.gun_name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SerialNumber(); ok {
+		if err := gun.SerialNumberValidator(v); err != nil {
+			return &ValidationError{Name: "serial_number", err: fmt.Errorf(`ent: validator failed for field "Gun.serial_number": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Description(); ok {
 		if err := gun.DescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Gun.description": %w`, err)}
@@ -509,11 +595,23 @@ func (_u *GunUpdateOne) sqlSave(ctx context.Context) (_node *Gun, err error) {
 	if _u.mutation.ConditionCleared() {
 		_spec.ClearField(gun.FieldCondition, field.TypeInt)
 	}
+	if value, ok := _u.mutation.SerialNumber(); ok {
+		_spec.SetField(gun.FieldSerialNumber, field.TypeString, value)
+	}
+	if _u.mutation.SerialNumberCleared() {
+		_spec.ClearField(gun.FieldSerialNumber, field.TypeString)
+	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(gun.FieldDescription, field.TypeString, value)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(gun.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.Image(); ok {
+		_spec.SetField(gun.FieldImage, field.TypeBytes, value)
+	}
+	if _u.mutation.ImageCleared() {
+		_spec.ClearField(gun.FieldImage, field.TypeBytes)
 	}
 	if value, ok := _u.mutation.MiscAttachments(); ok {
 		_spec.SetField(gun.FieldMiscAttachments, field.TypeString, value)

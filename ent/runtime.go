@@ -18,20 +18,24 @@ func init() {
 	gunDescGunName := gunFields[1].Descriptor()
 	// gun.GunNameValidator is a validator for the "gun_name" field. It is called by the builders before save.
 	gun.GunNameValidator = gunDescGunName.Validators[0].(func(string) error)
+	// gunDescSerialNumber is the schema descriptor for serial_number field.
+	gunDescSerialNumber := gunFields[4].Descriptor()
+	// gun.SerialNumberValidator is a validator for the "serial_number" field. It is called by the builders before save.
+	gun.SerialNumberValidator = gunDescSerialNumber.Validators[0].(func(string) error)
 	// gunDescDescription is the schema descriptor for description field.
-	gunDescDescription := gunFields[4].Descriptor()
+	gunDescDescription := gunFields[5].Descriptor()
 	// gun.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
 	gun.DescriptionValidator = gunDescDescription.Validators[0].(func(string) error)
 	// gunDescMiscAttachments is the schema descriptor for misc_attachments field.
-	gunDescMiscAttachments := gunFields[5].Descriptor()
+	gunDescMiscAttachments := gunFields[7].Descriptor()
 	// gun.MiscAttachmentsValidator is a validator for the "misc_attachments" field. It is called by the builders before save.
 	gun.MiscAttachmentsValidator = gunDescMiscAttachments.Validators[0].(func(string) error)
 	// gunDescCreatedAt is the schema descriptor for created_at field.
-	gunDescCreatedAt := gunFields[6].Descriptor()
+	gunDescCreatedAt := gunFields[8].Descriptor()
 	// gun.DefaultCreatedAt holds the default value on creation for the created_at field.
 	gun.DefaultCreatedAt = gunDescCreatedAt.Default.(func() time.Time)
 	// gunDescUpdatedAt is the schema descriptor for updated_at field.
-	gunDescUpdatedAt := gunFields[7].Descriptor()
+	gunDescUpdatedAt := gunFields[9].Descriptor()
 	// gun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	gun.DefaultUpdatedAt = gunDescUpdatedAt.Default.(func() time.Time)
 	// gun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
