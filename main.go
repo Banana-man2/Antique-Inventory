@@ -42,6 +42,7 @@ func main() {
 	r.GET("/guns/:id/image", h.ServeImage)
 	r.POST("/guns", h.CreateGunForm)
 	r.POST("/guns/:id", h.UpdateGunForm)
+	r.POST("/guns/:id/delete", h.DeleteGunForm)
 
 	// JSON API routes
 	r.GET("/api/guns", h.ListGunsJSON)

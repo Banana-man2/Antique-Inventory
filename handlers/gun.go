@@ -305,3 +305,17 @@ func (h *GunHandler) DeleteGun(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Deleted"})
 }
+
+func (h *GunHandler) DeleteGunForm(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusBadRequest, "Invalid ID")
+		return
+	}
+	err = h.Client.Gun.DeleteOneID(id).Exec(c.Request.Context())
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.Redirect(http.StatusFound, "/guns")
+}
