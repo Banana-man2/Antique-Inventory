@@ -32,6 +32,7 @@ func (Gun) Fields() []ent.Field {
 		field.String("description").Optional().MaxLen(255),
 		field.Bytes("image").Optional().Nillable(),
 		field.String("misc_attachments").Optional().MaxLen(255),
+		field.Float("value").Optional().Nillable(),
 		field.Time("created_at").
 			Default(time.Now).
 			Immutable().

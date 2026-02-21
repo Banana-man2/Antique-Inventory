@@ -19,6 +19,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "image", Type: field.TypeBytes, Nullable: true},
 		{Name: "misc_attachments", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "value", Type: field.TypeFloat64, Nullable: true},
 		{Name: "createdAt", Type: field.TypeTime},
 		{Name: "updatedAt", Type: field.TypeTime},
 	}

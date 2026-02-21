@@ -27,6 +27,8 @@ const (
 	FieldImage = "image"
 	// FieldMiscAttachments holds the string denoting the misc_attachments field in the database.
 	FieldMiscAttachments = "misc_attachments"
+	// FieldValue holds the string denoting the value field in the database.
+	FieldValue = "value"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "createdAt"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -45,6 +47,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldImage,
 	FieldMiscAttachments,
+	FieldValue,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -112,6 +115,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByMiscAttachments orders the results by the misc_attachments field.
 func ByMiscAttachments(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMiscAttachments, opts...).ToFunc()
+}
+
+// ByValue orders the results by the value field.
+func ByValue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldValue, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.
