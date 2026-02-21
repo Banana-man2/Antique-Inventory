@@ -102,6 +102,20 @@ func (_c *GunCreate) SetNillableMiscAttachments(v *string) *GunCreate {
 	return _c
 }
 
+// SetValue sets the "value" field.
+func (_c *GunCreate) SetValue(v float64) *GunCreate {
+	_c.mutation.SetValue(v)
+	return _c
+}
+
+// SetNillableValue sets the "value" field if the given value is not nil.
+func (_c *GunCreate) SetNillableValue(v *float64) *GunCreate {
+	if v != nil {
+		_c.SetValue(*v)
+	}
+	return _c
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_c *GunCreate) SetCreatedAt(v time.Time) *GunCreate {
 	_c.mutation.SetCreatedAt(v)
@@ -271,6 +285,10 @@ func (_c *GunCreate) createSpec() (*Gun, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.MiscAttachments(); ok {
 		_spec.SetField(gun.FieldMiscAttachments, field.TypeString, value)
 		_node.MiscAttachments = value
+	}
+	if value, ok := _c.mutation.Value(); ok {
+		_spec.SetField(gun.FieldValue, field.TypeFloat64, value)
+		_node.Value = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(gun.FieldCreatedAt, field.TypeTime, value)

@@ -168,6 +168,33 @@ func (_u *GunUpdate) ClearMiscAttachments() *GunUpdate {
 	return _u
 }
 
+// SetValue sets the "value" field.
+func (_u *GunUpdate) SetValue(v float64) *GunUpdate {
+	_u.mutation.ResetValue()
+	_u.mutation.SetValue(v)
+	return _u
+}
+
+// SetNillableValue sets the "value" field if the given value is not nil.
+func (_u *GunUpdate) SetNillableValue(v *float64) *GunUpdate {
+	if v != nil {
+		_u.SetValue(*v)
+	}
+	return _u
+}
+
+// AddValue adds value to the "value" field.
+func (_u *GunUpdate) AddValue(v float64) *GunUpdate {
+	_u.mutation.AddValue(v)
+	return _u
+}
+
+// ClearValue clears the value of the "value" field.
+func (_u *GunUpdate) ClearValue() *GunUpdate {
+	_u.mutation.ClearValue()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *GunUpdate) SetUpdatedAt(v time.Time) *GunUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -296,6 +323,15 @@ func (_u *GunUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.MiscAttachmentsCleared() {
 		_spec.ClearField(gun.FieldMiscAttachments, field.TypeString)
+	}
+	if value, ok := _u.mutation.Value(); ok {
+		_spec.SetField(gun.FieldValue, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedValue(); ok {
+		_spec.AddField(gun.FieldValue, field.TypeFloat64, value)
+	}
+	if _u.mutation.ValueCleared() {
+		_spec.ClearField(gun.FieldValue, field.TypeFloat64)
 	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(gun.FieldUpdatedAt, field.TypeTime, value)
@@ -460,6 +496,33 @@ func (_u *GunUpdateOne) ClearMiscAttachments() *GunUpdateOne {
 	return _u
 }
 
+// SetValue sets the "value" field.
+func (_u *GunUpdateOne) SetValue(v float64) *GunUpdateOne {
+	_u.mutation.ResetValue()
+	_u.mutation.SetValue(v)
+	return _u
+}
+
+// SetNillableValue sets the "value" field if the given value is not nil.
+func (_u *GunUpdateOne) SetNillableValue(v *float64) *GunUpdateOne {
+	if v != nil {
+		_u.SetValue(*v)
+	}
+	return _u
+}
+
+// AddValue adds value to the "value" field.
+func (_u *GunUpdateOne) AddValue(v float64) *GunUpdateOne {
+	_u.mutation.AddValue(v)
+	return _u
+}
+
+// ClearValue clears the value of the "value" field.
+func (_u *GunUpdateOne) ClearValue() *GunUpdateOne {
+	_u.mutation.ClearValue()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *GunUpdateOne) SetUpdatedAt(v time.Time) *GunUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -618,6 +681,15 @@ func (_u *GunUpdateOne) sqlSave(ctx context.Context) (_node *Gun, err error) {
 	}
 	if _u.mutation.MiscAttachmentsCleared() {
 		_spec.ClearField(gun.FieldMiscAttachments, field.TypeString)
+	}
+	if value, ok := _u.mutation.Value(); ok {
+		_spec.SetField(gun.FieldValue, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedValue(); ok {
+		_spec.AddField(gun.FieldValue, field.TypeFloat64, value)
+	}
+	if _u.mutation.ValueCleared() {
+		_spec.ClearField(gun.FieldValue, field.TypeFloat64)
 	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(gun.FieldUpdatedAt, field.TypeTime, value)

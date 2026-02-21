@@ -31,6 +31,8 @@ type Gun struct {
 	Image *[]byte `json:"image,omitempty"`
 	// MiscAttachments holds the value of the "misc_attachments" field.
 	MiscAttachments string `json:"misc_attachments,omitempty"`
+	// Value holds the value of the "value" field.
+	Value *float64 `json:"value,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -45,6 +47,8 @@ func (*Gun) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case gun.FieldImage:
 			values[i] = new([]byte)
+		case gun.FieldValue:
+			values[i] = new(sql.NullFloat64)
 		case gun.FieldID, gun.FieldYear, gun.FieldCondition:
 			values[i] = new(sql.NullInt64)
 		case gun.FieldGunName, gun.FieldSerialNumber, gun.FieldDescription, gun.FieldMiscAttachments:
@@ -116,6 +120,13 @@ func (_m *Gun) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.MiscAttachments = value.String
 			}
+		case gun.FieldValue:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field value", values[i])
+			} else if value.Valid {
+				_m.Value = new(float64)
+				*_m.Value = value.Float64
+			}
 		case gun.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -135,9 +146,9 @@ func (_m *Gun) assignValues(columns []string, values []any) error {
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the Gun.
+// GetValue returns the ent.Value that was dynamically selected and assigned to the Gun.
 // This includes values selected through modifiers, order, etc.
-func (_m *Gun) Value(name string) (ent.Value, error) {
+func (_m *Gun) GetValue(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
@@ -190,6 +201,11 @@ func (_m *Gun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("misc_attachments=")
 	builder.WriteString(_m.MiscAttachments)
+	builder.WriteString(", ")
+	if v := _m.Value; v != nil {
+		builder.WriteString("value=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))

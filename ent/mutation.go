@@ -42,6 +42,8 @@ type GunMutation struct {
 	description      *string
 	image            *[]byte
 	misc_attachments *string
+	value            *float64
+	addvalue         *float64
 	created_at       *time.Time
 	updated_at       *time.Time
 	clearedFields    map[string]struct{}
@@ -526,6 +528,76 @@ func (m *GunMutation) ResetMiscAttachments() {
 	delete(m.clearedFields, gun.FieldMiscAttachments)
 }
 
+// SetValue sets the "value" field.
+func (m *GunMutation) SetValue(f float64) {
+	m.value = &f
+	m.addvalue = nil
+}
+
+// Value returns the value of the "value" field in the mutation.
+func (m *GunMutation) Value() (r float64, exists bool) {
+	v := m.value
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldValue returns the old "value" field's value of the Gun entity.
+// If the Gun object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GunMutation) OldValue(ctx context.Context) (v *float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldValue is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldValue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldValue: %w", err)
+	}
+	return oldValue.Value, nil
+}
+
+// AddValue adds f to the "value" field.
+func (m *GunMutation) AddValue(f float64) {
+	if m.addvalue != nil {
+		*m.addvalue += f
+	} else {
+		m.addvalue = &f
+	}
+}
+
+// AddedValue returns the value that was added to the "value" field in this mutation.
+func (m *GunMutation) AddedValue() (r float64, exists bool) {
+	v := m.addvalue
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearValue clears the value of the "value" field.
+func (m *GunMutation) ClearValue() {
+	m.value = nil
+	m.addvalue = nil
+	m.clearedFields[gun.FieldValue] = struct{}{}
+}
+
+// ValueCleared returns if the "value" field was cleared in this mutation.
+func (m *GunMutation) ValueCleared() bool {
+	_, ok := m.clearedFields[gun.FieldValue]
+	return ok
+}
+
+// ResetValue resets all changes to the "value" field.
+func (m *GunMutation) ResetValue() {
+	m.value = nil
+	m.addvalue = nil
+	delete(m.clearedFields, gun.FieldValue)
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *GunMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -632,7 +704,7 @@ func (m *GunMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GunMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.gun_name != nil {
 		fields = append(fields, gun.FieldGunName)
 	}
@@ -653,6 +725,9 @@ func (m *GunMutation) Fields() []string {
 	}
 	if m.misc_attachments != nil {
 		fields = append(fields, gun.FieldMiscAttachments)
+	}
+	if m.value != nil {
+		fields = append(fields, gun.FieldValue)
 	}
 	if m.created_at != nil {
 		fields = append(fields, gun.FieldCreatedAt)
@@ -682,6 +757,8 @@ func (m *GunMutation) Field(name string) (ent.Value, bool) {
 		return m.Image()
 	case gun.FieldMiscAttachments:
 		return m.MiscAttachments()
+	case gun.FieldValue:
+		return m.Value()
 	case gun.FieldCreatedAt:
 		return m.CreatedAt()
 	case gun.FieldUpdatedAt:
@@ -709,6 +786,8 @@ func (m *GunMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldImage(ctx)
 	case gun.FieldMiscAttachments:
 		return m.OldMiscAttachments(ctx)
+	case gun.FieldValue:
+		return m.OldValue(ctx)
 	case gun.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case gun.FieldUpdatedAt:
@@ -771,6 +850,13 @@ func (m *GunMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMiscAttachments(v)
 		return nil
+	case gun.FieldValue:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetValue(v)
+		return nil
 	case gun.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -799,6 +885,9 @@ func (m *GunMutation) AddedFields() []string {
 	if m.addcondition != nil {
 		fields = append(fields, gun.FieldCondition)
 	}
+	if m.addvalue != nil {
+		fields = append(fields, gun.FieldValue)
+	}
 	return fields
 }
 
@@ -811,6 +900,8 @@ func (m *GunMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedYear()
 	case gun.FieldCondition:
 		return m.AddedCondition()
+	case gun.FieldValue:
+		return m.AddedValue()
 	}
 	return nil, false
 }
@@ -833,6 +924,13 @@ func (m *GunMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCondition(v)
+		return nil
+	case gun.FieldValue:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddValue(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Gun numeric field %s", name)
@@ -859,6 +957,9 @@ func (m *GunMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(gun.FieldMiscAttachments) {
 		fields = append(fields, gun.FieldMiscAttachments)
+	}
+	if m.FieldCleared(gun.FieldValue) {
+		fields = append(fields, gun.FieldValue)
 	}
 	return fields
 }
@@ -892,6 +993,9 @@ func (m *GunMutation) ClearField(name string) error {
 	case gun.FieldMiscAttachments:
 		m.ClearMiscAttachments()
 		return nil
+	case gun.FieldValue:
+		m.ClearValue()
+		return nil
 	}
 	return fmt.Errorf("unknown Gun nullable field %s", name)
 }
@@ -920,6 +1024,9 @@ func (m *GunMutation) ResetField(name string) error {
 		return nil
 	case gun.FieldMiscAttachments:
 		m.ResetMiscAttachments()
+		return nil
+	case gun.FieldValue:
+		m.ResetValue()
 		return nil
 	case gun.FieldCreatedAt:
 		m.ResetCreatedAt()

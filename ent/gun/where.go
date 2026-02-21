@@ -89,6 +89,11 @@ func MiscAttachments(v string) predicate.Gun {
 	return predicate.Gun(sql.FieldEQ(FieldMiscAttachments, v))
 }
 
+// Value applies equality check predicate on the "value" field. It's identical to ValueEQ.
+func Value(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldEQ(FieldValue, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Gun {
 	return predicate.Gun(sql.FieldEQ(FieldCreatedAt, v))
@@ -537,6 +542,56 @@ func MiscAttachmentsEqualFold(v string) predicate.Gun {
 // MiscAttachmentsContainsFold applies the ContainsFold predicate on the "misc_attachments" field.
 func MiscAttachmentsContainsFold(v string) predicate.Gun {
 	return predicate.Gun(sql.FieldContainsFold(FieldMiscAttachments, v))
+}
+
+// ValueEQ applies the EQ predicate on the "value" field.
+func ValueEQ(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldEQ(FieldValue, v))
+}
+
+// ValueNEQ applies the NEQ predicate on the "value" field.
+func ValueNEQ(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldNEQ(FieldValue, v))
+}
+
+// ValueIn applies the In predicate on the "value" field.
+func ValueIn(vs ...float64) predicate.Gun {
+	return predicate.Gun(sql.FieldIn(FieldValue, vs...))
+}
+
+// ValueNotIn applies the NotIn predicate on the "value" field.
+func ValueNotIn(vs ...float64) predicate.Gun {
+	return predicate.Gun(sql.FieldNotIn(FieldValue, vs...))
+}
+
+// ValueGT applies the GT predicate on the "value" field.
+func ValueGT(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldGT(FieldValue, v))
+}
+
+// ValueGTE applies the GTE predicate on the "value" field.
+func ValueGTE(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldGTE(FieldValue, v))
+}
+
+// ValueLT applies the LT predicate on the "value" field.
+func ValueLT(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldLT(FieldValue, v))
+}
+
+// ValueLTE applies the LTE predicate on the "value" field.
+func ValueLTE(v float64) predicate.Gun {
+	return predicate.Gun(sql.FieldLTE(FieldValue, v))
+}
+
+// ValueIsNil applies the IsNil predicate on the "value" field.
+func ValueIsNil() predicate.Gun {
+	return predicate.Gun(sql.FieldIsNull(FieldValue))
+}
+
+// ValueNotNil applies the NotNil predicate on the "value" field.
+func ValueNotNil() predicate.Gun {
+	return predicate.Gun(sql.FieldNotNull(FieldValue))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

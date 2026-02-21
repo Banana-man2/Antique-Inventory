@@ -42,6 +42,10 @@
         <label>Misc Attachments:
             <input type="text" name="misc_attachments" value="{{if .gun}}{{.gun.MiscAttachments}}{{end}}">
         </label>
+        <label>Value ($):
+            <input type="number" name="value" step="0.01" min="0"
+                   value="{{if .gun}}{{if .gun.Value}}{{.gun.Value}}{{end}}{{end}}">
+        </label>
         <button type="submit" class="btn">{{if .gun}}Update{{else}}Create{{end}}</button>
     </form>
     <br>

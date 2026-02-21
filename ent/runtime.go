@@ -31,11 +31,11 @@ func init() {
 	// gun.MiscAttachmentsValidator is a validator for the "misc_attachments" field. It is called by the builders before save.
 	gun.MiscAttachmentsValidator = gunDescMiscAttachments.Validators[0].(func(string) error)
 	// gunDescCreatedAt is the schema descriptor for created_at field.
-	gunDescCreatedAt := gunFields[8].Descriptor()
+	gunDescCreatedAt := gunFields[9].Descriptor()
 	// gun.DefaultCreatedAt holds the default value on creation for the created_at field.
 	gun.DefaultCreatedAt = gunDescCreatedAt.Default.(func() time.Time)
 	// gunDescUpdatedAt is the schema descriptor for updated_at field.
-	gunDescUpdatedAt := gunFields[9].Descriptor()
+	gunDescUpdatedAt := gunFields[10].Descriptor()
 	// gun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	gun.DefaultUpdatedAt = gunDescUpdatedAt.Default.(func() time.Time)
 	// gun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

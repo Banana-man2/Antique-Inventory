@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -18,12 +19,38 @@ type GunHandler struct {
 // HTML handlers
 
 func (h *GunHandler) ListGuns(c *gin.Context) {
-	guns, err := h.Client.Gun.Query().Order(ent.Asc(gun.FieldID)).All(c.Request.Context())
+	ctx := c.Request.Context()
+	q := strings.TrimSpace(c.Query("q"))
+
+	query := h.Client.Gun.Query().Order(ent.Asc(gun.FieldID))
+	if q != "" {
+		query = query.Where(gun.Or(
+			gun.GunNameContainsFold(q),
+			gun.SerialNumberContainsFold(q),
+			gun.DescriptionContainsFold(q),
+			gun.MiscAttachmentsContainsFold(q),
+		))
+	}
+
+	guns, err := query.All(ctx)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error fetching guns: %v", err)
 		return
 	}
-	c.HTML(http.StatusOK, "guns_list.html", gin.H{"guns": guns})
+
+	var totalValue float64
+	for _, g := range guns {
+		if g.Value != nil {
+			totalValue += *g.Value
+		}
+	}
+
+	c.HTML(http.StatusOK, "guns_list.html", gin.H{
+		"guns":       guns,
+		"count":      len(guns),
+		"totalValue": totalValue,
+		"query":      q,
+	})
 }
 
 func (h *GunHandler) GetGun(c *gin.Context) {
@@ -96,6 +123,11 @@ func (h *GunHandler) CreateGunForm(c *gin.Context) {
 	if v := c.PostForm("misc_attachments"); v != "" {
 		create.SetMiscAttachments(v)
 	}
+	if v := c.PostForm("value"); v != "" {
+		if val, err := strconv.ParseFloat(v, 64); err == nil {
+			create.SetValue(val)
+		}
+	}
 	if file, err := c.FormFile("image"); err == nil {
 		f, err := file.Open()
 		if err == nil {
@@ -154,6 +186,13 @@ func (h *GunHandler) UpdateGunForm(c *gin.Context) {
 	} else {
 		update.ClearMiscAttachments()
 	}
+	if v := c.PostForm("value"); v != "" {
+		if val, err := strconv.ParseFloat(v, 64); err == nil {
+			update.SetValue(val)
+		}
+	} else {
+		update.ClearValue()
+	}
 	if file, err := c.FormFile("image"); err == nil {
 		f, err := file.Open()
 		if err == nil {
@@ -200,12 +239,13 @@ func (h *GunHandler) GetGunJSON(c *gin.Context) {
 
 func (h *GunHandler) CreateGun(c *gin.Context) {
 	var input struct {
-		GunName         string `json:"gun_name"`
-		Year            *int   `json:"year"`
-		Condition       *int   `json:"condition"`
-		SerialNumber    string `json:"serial_number"`
-		Description     string `json:"description"`
-		MiscAttachments string `json:"misc_attachments"`
+		GunName         string   `json:"gun_name"`
+		Year            *int     `json:"year"`
+		Condition       *int     `json:"condition"`
+		SerialNumber    string   `json:"serial_number"`
+		Description     string   `json:"description"`
+		MiscAttachments string   `json:"misc_attachments"`
+		Value           *float64 `json:"value"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -228,6 +268,9 @@ func (h *GunHandler) CreateGun(c *gin.Context) {
 	if input.MiscAttachments != "" {
 		create.SetMiscAttachments(input.MiscAttachments)
 	}
+	if input.Value != nil {
+		create.SetValue(*input.Value)
+	}
 
 	g, err := create.Save(c.Request.Context())
 	if err != nil {
@@ -245,12 +288,13 @@ func (h *GunHandler) UpdateGun(c *gin.Context) {
 	}
 
 	var input struct {
-		GunName         string `json:"gun_name"`
-		Year            *int   `json:"year"`
-		Condition       *int   `json:"condition"`
-		SerialNumber    string `json:"serial_number"`
-		Description     string `json:"description"`
-		MiscAttachments string `json:"misc_attachments"`
+		GunName         string   `json:"gun_name"`
+		Year            *int     `json:"year"`
+		Condition       *int     `json:"condition"`
+		SerialNumber    string   `json:"serial_number"`
+		Description     string   `json:"description"`
+		MiscAttachments string   `json:"misc_attachments"`
+		Value           *float64 `json:"value"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -282,6 +326,11 @@ func (h *GunHandler) UpdateGun(c *gin.Context) {
 		update.SetMiscAttachments(input.MiscAttachments)
 	} else {
 		update.ClearMiscAttachments()
+	}
+	if input.Value != nil {
+		update.SetValue(*input.Value)
+	} else {
+		update.ClearValue()
 	}
 
 	g, err := update.Save(c.Request.Context())
